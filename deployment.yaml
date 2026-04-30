@@ -16,5 +16,6 @@ spec:
       containers:
         - name: demo-app
           image: jhacr01.azurecr.io/demo-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80

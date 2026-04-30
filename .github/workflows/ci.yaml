@@ -37,3 +37,17 @@ jobs:
         run: |
           docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
           docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:latest
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart AKS deployment
+        run: |
+          az aks get-credentials \
+            --resource-group JH-RG \
+            --name JH-AKS-Cluster \
+            --overwrite-existing
+
+          kubectl rollout restart deployment demo-app -n demo-app

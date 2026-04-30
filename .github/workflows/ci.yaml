@@ -28,8 +28,12 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG -t $ACR_LOGIN_SERVER/$IMAGE_NAME:latest .
+        run: |
+          docker build \
+            -t $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG \
+            -t $ACR_LOGIN_SERVER/$IMAGE_NAME:latest .
 
       - name: Push Docker image
-        run: docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
           docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:latest

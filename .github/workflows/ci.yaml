@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "index.html"
+      - "Dockerfile"
+      - '.github/workflows/ci.yaml'
 
 env:
   ACR_LOGIN_SERVER: jhacr01.azurecr.io

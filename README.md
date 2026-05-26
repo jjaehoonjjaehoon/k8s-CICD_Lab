@@ -111,16 +111,28 @@ GitHub Push
 이 방식은 실습 환경에서 단순하고 빠르게 CI/CD 흐름을 확인하기에 적합합니다.  
 다만 GitOps 관점에서는 manifest의 image tag가 항상 `latest`로 유지되기 때문에, 어떤 이미지 버전이 실제로 배포되었는지 추적하기 어렵다는 한계가 있습니다.
 
+## 검증 결과
+
+본 프로젝트에서는 GitHub Push 이후 CI/CD 파이프라인이 정상적으로 동작하는지 다음 항목을 기준으로 검증했습니다.
+
+| 검증 항목 | 확인 내용 | 결과 |
+|---|---|---|
+| GitHub Actions 실행 | Push 후 Workflow가 자동 실행되는지 확인 | 정상 |
+| Docker 이미지 빌드 | GitHub Actions에서 Dockerfile 기반 이미지 빌드가 성공하는지 확인 | 정상 |
+| ACR Push | 빌드된 `latest` 이미지가 Azure Container Registry에 Push되는지 확인 | 정상 |
+| AKS Deployment 반영 | `kubectl rollout restart` 이후 새 Pod가 생성되고 Running 상태가 되는지 확인 | 정상 |
+| LoadBalancer 접속 | `demo-app-lb`의 External IP로 접속하여 수정된 `index.html` 내용이 반영되는지 확인 | 정상 |
+| Argo CD 상태 | Argo CD Application이 `Synced` 및 `Healthy` 상태인지 확인 | 정상 |
+
+
 ## 한계 및 향후 개선 사항
 
-현재 프로젝트는 학습 목적의 CI/CD 실습 구조입니다.  
 현재 방식은 `latest` 태그와 `kubectl rollout restart`를 사용하여 최신 이미지를 AKS에 반영합니다.
 
 | 현재 구조 | 한계 | 개선 방향 |
 |---|---|---|
 | `latest` 태그 사용 | manifest 값이 변경되지 않아 배포 버전 추적이 어려움 | commit SHA 기반 이미지 태그 사용 |
 | `kubectl rollout restart` 사용 | GitHub Actions가 AKS에 직접 명령을 실행함 | Argo CD가 Git 변경사항을 기준으로 Sync하도록 개선 |
-| 단일 Repository 구성 | 애플리케이션 코드와 Kubernetes manifest가 같은 저장소에 존재 | App Repository와 Manifest Repository 분리 가능 |
 | LoadBalancer Service 사용 | 단순 외부 노출 구조 | Ingress Controller 또는 Application Gateway 연동 가능 |
 
 향후에는 Docker 이미지를 commit SHA 기반으로 태깅하고, GitHub Actions가 `deployment.yaml`의 image 값을 자동으로 업데이트하도록 개선할 수 있습니다.

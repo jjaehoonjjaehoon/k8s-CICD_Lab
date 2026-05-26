@@ -55,3 +55,14 @@ External User Access
 7. 새 Pod는 ACR에서 `latest` 이미지를 Pull한 뒤, 이후 기존 Pod가 점진적으로 교체됩니다.
 8. Service type LoadBalancer를 통해 외부 Public IP에서 변경된 웹 페이지를 확인합니다.
 9. Argo CD에서 Application의 Synced 및 Healthy 상태를 확인합니다.
+
+## Repository Structure
+
+| File                        | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| `index.html`                | 실제 웹 페이지 내용                                  |
+| `Dockerfile`                | Nginx 기반 Docker 이미지 빌드 정의                    |
+| `.github/workflows/ci.yaml` | GitHub Actions CI/CD Workflow                |
+| `deployment.yaml`           | AKS에 배포할 Kubernetes Deployment 정의            |
+| `service-lb.yaml`           | 외부 접속을 위한 Kubernetes LoadBalancer Service 정의 |
+| `README.md`                 | 프로젝트 설명 문서                                   |

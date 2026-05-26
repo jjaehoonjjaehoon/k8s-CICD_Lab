@@ -33,3 +33,9 @@
 이 프로젝트를 통해 GitHub Repository의 코드 변경이 GitHub Actions를 통해 컨테이너 이미지로 빌드되고, ACR에 Push된 뒤, AKS에서 최신 이미지 기반 Pod로 교체되는 흐름을 확인했습니다.
 
 또한 Argo CD를 통해 GitHub Repository의 Kubernetes manifest와 AKS 클러스터 리소스 상태를 비교하고, Application이 `Synced` 및 `Healthy` 상태인지 확인했습니다.
+
+## 마무리
+
+GitHub Actions는 코드 Push 이벤트를 기준으로 Docker 이미지를 빌드하고 Azure Container Registry에 Push하는 CI 역할을 수행했습니다. 또한 현재 구조에서는 `latest` 태그 기반 이미지 반영을 위해 `kubectl rollout restart`를 실행하여 AKS Deployment의 Rolling Update를 트리거했습니다.
+
+Argo CD는 GitHub Repository의 Kubernetes manifest를 기준으로 AKS 리소스 상태를 관리하고, Application의 `Synced` 및 `Healthy` 상태를 확인하는 GitOps 도구로 활용했습니다.
